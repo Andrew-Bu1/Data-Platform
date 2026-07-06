@@ -13,6 +13,13 @@ type contextKey string
 
 const userIDKey contextKey = "user_id"
 
+// GetUserID extracts the authenticated user's ID from the request context.
+// Returns the user ID string and true if present, or an empty string and false if not.
+func GetUserID(ctx context.Context) (string, bool) {
+	v, ok := ctx.Value(userIDKey).(string)
+	return v, ok
+}
+
 type AuthMiddleware struct {
 	log       *slog.Logger
 	secretKey string

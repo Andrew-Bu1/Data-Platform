@@ -40,6 +40,11 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.Email == "" || req.Password == "" {
+		writeError(w, http.StatusBadRequest, "email and password are required")
+		return
+	}
+
 	if err := h.auth.Register(r.Context(), &req); err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to register user")
 		return
@@ -63,6 +68,11 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	if req.Email == "" || req.Password == "" {
+		writeError(w, http.StatusBadRequest, "email and password are required")
 		return
 	}
 

@@ -34,7 +34,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id uuid.UUID) (*model.User
 	)
 
 	if err == pgx.ErrNoRows {
-		return nil, err
+		return nil, ErrNotFound
 	}
 
 	if err != nil {
@@ -60,7 +60,7 @@ func (r *UserRepository) Update(ctx context.Context, id uuid.UUID, req *model.Up
 	}
 
 	if tag.RowsAffected() == 0 {
-		return pgx.ErrNoRows
+		return ErrNotFound
 	}
 
 	return nil
@@ -78,7 +78,7 @@ func (r *UserRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 
 	if tag.RowsAffected() == 0 {
-		return pgx.ErrNoRows
+		return ErrNotFound
 	}
 
 	return nil

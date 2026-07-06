@@ -2,9 +2,12 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
+	"github.com/Andrew-Bu1/api/internal/middleware"
 	"github.com/Andrew-Bu1/api/internal/model"
+	"github.com/Andrew-Bu1/api/internal/repository"
 	"github.com/Andrew-Bu1/api/internal/service"
 )
 
@@ -31,6 +34,7 @@ func (h *UserHandler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.H
 // @Success 200 {object} model.UserResponse
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
+// @Failure 404 {object} model.ErrorResponse
 // @Failure 500 {object} model.ErrorResponse
 // @Router /users/{id} [get]
 func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
@@ -42,6 +46,10 @@ func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	}
 	user, err := h.user.GetByID(r.Context(), userID)
 	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			writeError(w, http.StatusNotFound, "user not found")
+			return
+		}
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -59,6 +67,8 @@ func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} model.EmptyResponse
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
+// @Failure 403 {object} model.ErrorResponse
+// @Failure 404 {object} model.ErrorResponse
 // @Failure 500 {object} model.ErrorResponse
 // @Router /users/{id} [patch]
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -69,12 +79,23 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid UUID format")
 		return
 	}
+
+	callerID, ok := middleware.GetUserID(r.Context())
+	if !ok || callerID != userID.String() {
+		writeError(w, http.StatusForbidden, "forbidden")
+		return
+	}
+
 	var req model.UpdateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 	if err := h.user.Update(r.Context(), userID, &req); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			writeError(w, http.StatusNotFound, "user not found")
+			return
+		}
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -90,6 +111,8 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} model.EmptyResponse
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
+// @Failure 403 {object} model.ErrorResponse
+// @Failure 404 {object} model.ErrorResponse
 // @Failure 500 {object} model.ErrorResponse
 // @Router /users/{id} [delete]
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -100,7 +123,18 @@ func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid UUID format")
 		return
 	}
+
+	callerID, ok := middleware.GetUserID(r.Context())
+	if !ok || callerID != userID.String() {
+		writeError(w, http.StatusForbidden, "forbidden")
+		return
+	}
+
 	if err := h.user.Delete(r.Context(), userID); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			writeError(w, http.StatusNotFound, "user not found")
+			return
+		}
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
