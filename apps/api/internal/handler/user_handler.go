@@ -1,9 +1,8 @@
 package handler
 
 import (
-	"net/http"
-
 	"encoding/json"
+	"net/http"
 
 	"github.com/Andrew-Bu1/api/internal/model"
 	"github.com/Andrew-Bu1/api/internal/service"
@@ -17,12 +16,23 @@ func NewUserHandler(user *service.UserService) *UserHandler {
 	return &UserHandler{user: user}
 }
 
-func (h *UserHandler) RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("GET /users/{id}", h.GetByID)
-	mux.HandleFunc("PATCH /users/{id}", h.Update)
-	mux.HandleFunc("DELETE /users/{id}", h.Delete)
+func (h *UserHandler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.Handler) http.Handler) {
+	mux.Handle("GET /users/{id}", requireAuth(http.HandlerFunc(h.GetByID)))
+	mux.Handle("PATCH /users/{id}", requireAuth(http.HandlerFunc(h.Update)))
+	mux.Handle("DELETE /users/{id}", requireAuth(http.HandlerFunc(h.Delete)))
 }
 
+// GetByID godoc
+// @Summary Get user by ID
+// @Tags users
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "User ID"
+// @Success 200 {object} model.UserResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Failure 500 {object} model.ErrorResponse
+// @Router /users/{id} [get]
 func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	userID, err := parseUUID(id)
@@ -38,6 +48,19 @@ func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, user)
 }
 
+// Update godoc
+// @Summary Update user
+// @Tags users
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "User ID"
+// @Param request body model.UpdateUserRequest true "Update user request"
+// @Success 200 {object} model.EmptyResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Failure 500 {object} model.ErrorResponse
+// @Router /users/{id} [patch]
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 
@@ -58,6 +81,17 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, nil)
 }
 
+// Delete godoc
+// @Summary Delete user
+// @Tags users
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "User ID"
+// @Success 200 {object} model.EmptyResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Failure 500 {object} model.ErrorResponse
+// @Router /users/{id} [delete]
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 

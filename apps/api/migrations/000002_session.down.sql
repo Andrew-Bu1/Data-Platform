@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS sessions;
+
+ALTER TABLE users
+    ALTER COLUMN password_hash DROP NOT NULL;
