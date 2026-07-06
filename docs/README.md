@@ -59,6 +59,8 @@ Organization
             └── Dataset
 ```
 
+Database schema details: [Database Schema](database.md)
+
 ---
 
 ## Sprint Map
