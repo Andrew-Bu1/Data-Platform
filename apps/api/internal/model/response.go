@@ -5,17 +5,7 @@ type ErrorResponse struct {
 	Error  string `json:"error" example:"invalid email or password"`
 }
 
-type EmptyResponse struct {
-	Status string      `json:"status" example:"OK"`
-	Data   interface{} `json:"data"`
-}
-
-type AuthResponseEnvelope struct {
-	Status string       `json:"status" example:"OK"`
-	Data   AuthResponse `json:"data"`
-}
-
-type UserResponse struct {
+type Response[T any] struct {
 	Status string `json:"status" example:"OK"`
-	Data   User   `json:"data"`
+	Data   T      `json:"data"`
 }

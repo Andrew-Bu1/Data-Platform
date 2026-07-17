@@ -31,7 +31,7 @@ func (h *UserHandler) RegisterRoutes(mux *http.ServeMux, requireAuth func(http.H
 // @Produce json
 // @Security BearerAuth
 // @Param id path string true "User ID"
-// @Success 200 {object} model.UserResponse
+// @Success 200 {object} model.Response[model.User]
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
 // @Failure 404 {object} model.ErrorResponse
@@ -64,7 +64,7 @@ func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 // @Security BearerAuth
 // @Param id path string true "User ID"
 // @Param request body model.UpdateUserRequest true "Update user request"
-// @Success 200 {object} model.EmptyResponse
+// @Success 204 {object} nil
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
 // @Failure 403 {object} model.ErrorResponse
@@ -99,7 +99,7 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	writeJSON(w, http.StatusOK, nil)
+	writeJSON(w, http.StatusNoContent, nil)
 }
 
 // Delete godoc
@@ -108,7 +108,7 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Security BearerAuth
 // @Param id path string true "User ID"
-// @Success 200 {object} model.EmptyResponse
+// @Success 204 {object} nil
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
 // @Failure 403 {object} model.ErrorResponse
@@ -138,5 +138,5 @@ func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	writeJSON(w, http.StatusOK, nil)
+	writeJSON(w, http.StatusNoContent, nil)
 }

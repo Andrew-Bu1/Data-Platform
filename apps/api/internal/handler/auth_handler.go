@@ -59,7 +59,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param request body model.LoginRequest true "Login request"
-// @Success 200 {object} model.AuthResponseEnvelope
+// @Success 200 {object} model.Response[model.AuthResponse]
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
 // @Router /auth/login [post]
@@ -92,7 +92,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Param request body model.LogoutRequest true "Logout request"
-// @Success 200
+// @Success 204
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 401 {object} model.ErrorResponse
 // @Router /auth/logout [post]
@@ -109,5 +109,5 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusNoContent)
 }

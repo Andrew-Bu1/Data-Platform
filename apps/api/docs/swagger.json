@@ -28,7 +28,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.LoginRequest"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.LoginRequest"
                         }
                     }
                 ],
@@ -36,19 +36,19 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.AuthResponseEnvelope"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_AuthResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     }
                 }
@@ -73,24 +73,24 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.LogoutRequest"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.LogoutRequest"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     }
                 }
@@ -115,24 +115,24 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.RegisterRequest"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.RegisterRequest"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": ""
+                        "description": "Created"
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     }
                 }
@@ -165,25 +165,31 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.UserResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_User"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     }
                 }
@@ -211,28 +217,37 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.EmptyResponse"
-                        }
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     }
                 }
@@ -267,33 +282,42 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UpdateUserRequest"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.UpdateUserRequest"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.EmptyResponse"
-                        }
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse"
                         }
                     }
                 }
@@ -301,7 +325,7 @@
         }
     },
     "definitions": {
-        "model.AuthResponse": {
+        "github_com_Andrew-Bu1_api_internal_model.AuthResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -312,29 +336,7 @@
                 }
             }
         },
-        "model.AuthResponseEnvelope": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/model.AuthResponse"
-                },
-                "status": {
-                    "type": "string",
-                    "example": "OK"
-                }
-            }
-        },
-        "model.EmptyResponse": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "status": {
-                    "type": "string",
-                    "example": "OK"
-                }
-            }
-        },
-        "model.ErrorResponse": {
+        "github_com_Andrew-Bu1_api_internal_model.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -347,7 +349,7 @@
                 }
             }
         },
-        "model.LoginRequest": {
+        "github_com_Andrew-Bu1_api_internal_model.LoginRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -358,7 +360,7 @@
                 }
             }
         },
-        "model.LogoutRequest": {
+        "github_com_Andrew-Bu1_api_internal_model.LogoutRequest": {
             "type": "object",
             "properties": {
                 "refresh_token": {
@@ -366,7 +368,7 @@
                 }
             }
         },
-        "model.RegisterRequest": {
+        "github_com_Andrew-Bu1_api_internal_model.RegisterRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -377,7 +379,31 @@
                 }
             }
         },
-        "model.UpdateUserRequest": {
+        "github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_AuthResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.AuthResponse"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "OK"
+                }
+            }
+        },
+        "github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_User": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/github_com_Andrew-Bu1_api_internal_model.User"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "OK"
+                }
+            }
+        },
+        "github_com_Andrew-Bu1_api_internal_model.UpdateUserRequest": {
             "type": "object",
             "properties": {
                 "email": {
@@ -388,7 +414,7 @@
                 }
             }
         },
-        "model.User": {
+        "github_com_Andrew-Bu1_api_internal_model.User": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -405,18 +431,6 @@
                 },
                 "updated_at": {
                     "type": "string"
-                }
-            }
-        },
-        "model.UserResponse": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/model.User"
-                },
-                "status": {
-                    "type": "string",
-                    "example": "OK"
                 }
             }
         }

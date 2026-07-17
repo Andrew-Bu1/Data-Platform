@@ -1,28 +1,13 @@
 basePath: /
 definitions:
-  model.AuthResponse:
+  github_com_Andrew-Bu1_api_internal_model.AuthResponse:
     properties:
       access_token:
         type: string
       refresh_token:
         type: string
     type: object
-  model.AuthResponseEnvelope:
-    properties:
-      data:
-        $ref: '#/definitions/model.AuthResponse'
-      status:
-        example: OK
-        type: string
-    type: object
-  model.EmptyResponse:
-    properties:
-      data: {}
-      status:
-        example: OK
-        type: string
-    type: object
-  model.ErrorResponse:
+  github_com_Andrew-Bu1_api_internal_model.ErrorResponse:
     properties:
       error:
         example: invalid email or password
@@ -31,33 +16,49 @@ definitions:
         example: Unauthorized
         type: string
     type: object
-  model.LoginRequest:
+  github_com_Andrew-Bu1_api_internal_model.LoginRequest:
     properties:
       email:
         type: string
       password:
         type: string
     type: object
-  model.LogoutRequest:
+  github_com_Andrew-Bu1_api_internal_model.LogoutRequest:
     properties:
       refresh_token:
         type: string
     type: object
-  model.RegisterRequest:
+  github_com_Andrew-Bu1_api_internal_model.RegisterRequest:
     properties:
       email:
         type: string
       password:
         type: string
     type: object
-  model.UpdateUserRequest:
+  github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_AuthResponse:
+    properties:
+      data:
+        $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.AuthResponse'
+      status:
+        example: OK
+        type: string
+    type: object
+  github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_User:
+    properties:
+      data:
+        $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.User'
+      status:
+        example: OK
+        type: string
+    type: object
+  github_com_Andrew-Bu1_api_internal_model.UpdateUserRequest:
     properties:
       email:
         type: string
       full_name:
         type: string
     type: object
-  model.User:
+  github_com_Andrew-Bu1_api_internal_model.User:
     properties:
       created_at:
         type: string
@@ -68,14 +69,6 @@ definitions:
       id:
         type: string
       updated_at:
-        type: string
-    type: object
-  model.UserResponse:
-    properties:
-      data:
-        $ref: '#/definitions/model.User'
-      status:
-        example: OK
         type: string
     type: object
 host: localhost:8080
@@ -95,22 +88,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/model.LoginRequest'
+          $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.AuthResponseEnvelope'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_AuthResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
       summary: Login user
       tags:
       - auth
@@ -124,20 +117,20 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/model.LogoutRequest'
+          $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.LogoutRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "204":
+          description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
       summary: Logout user
       tags:
       - auth
@@ -151,20 +144,20 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/model.RegisterRequest'
+          $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.RegisterRequest'
       produces:
       - application/json
       responses:
         "201":
-          description: ""
+          description: Created
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
       summary: Register user
       tags:
       - auth
@@ -179,22 +172,28 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.EmptyResponse'
+        "204":
+          description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Delete user
@@ -213,19 +212,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.UserResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.Response-github_com_Andrew-Bu1_api_internal_model_User'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Get user by ID
@@ -245,26 +248,32 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/model.UpdateUserRequest'
+          $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.UpdateUserRequest'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.EmptyResponse'
+        "204":
+          description: No Content
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/github_com_Andrew-Bu1_api_internal_model.ErrorResponse'
       security:
       - BearerAuth: []
       summary: Update user

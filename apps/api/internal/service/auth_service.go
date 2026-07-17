@@ -57,7 +57,7 @@ func (s *AuthService) Login(ctx context.Context, req *model.LoginRequest) (*mode
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password)); err != nil {
-		s.log.Error("failed to compare password hash", slog.String("email", req.Email), slog.Any("error", err))
+		s.log.Error("Password is incorrect")
 		return nil, err
 	}
 
