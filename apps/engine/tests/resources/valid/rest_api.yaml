@@ -1,0 +1,51 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: crm_leads_api_daily
+  domain: crm
+  owner: team-crm
+  tags: [api, pii]
+
+schedule:
+  cron: "30 1 * * *"
+
+compute:
+  engine: duckdb
+
+source:
+  type: rest_api
+  connection_ref: openbao://secret/data/prod/connections/crm_api
+  endpoint: /v2/leads
+  method: GET
+  pagination: cursor
+  columns:
+    - source: lead_id
+      target: lead_id
+      source_type: string
+      target_type: string
+    - source: phone
+      target: phone
+      source_type: string
+      target_type: string
+
+landing:
+  format: parquet
+  codec: gzip
+  ttl_days: 14
+
+raw:
+  namespace: prod.raw
+  table: crm_leads
+  write_mode: append
+
+staging:
+  namespace: prod.staging
+  table: crm_leads
+  pattern: single_snapshot
+  pk_cols: [lead_id]
+  delete_policy: soft_delete
+
+security:
+  pii_columns: [phone]
+  mode: encrypt_inplace
+  key_ref: openbao://transit/keys/pii-platform

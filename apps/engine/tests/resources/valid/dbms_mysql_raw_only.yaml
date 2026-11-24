@@ -1,0 +1,28 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: ref_branch_raw_only
+  domain: reference
+  owner: team-platform
+
+schedule:
+  cron: "0 3 * * *"
+
+compute:
+  engine: duckdb
+
+source:
+  type: dbms
+  connection_ref: openbao://secret/data/prod/connections/ref_mysql
+  dialect: mysql
+  schema_name: refdb
+  table: branches
+  slicing:
+    strategy: HASH_MODULO
+    pk_columns: [branch_code]
+    target_partitions: 8
+
+raw:
+  namespace: prod.raw
+  table: ref_branches
+  write_mode: overwrite_partition

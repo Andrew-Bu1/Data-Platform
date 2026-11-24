@@ -1,0 +1,22 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: invalid_security_missing_key
+  domain: crm
+  owner: team-crm
+
+schedule:
+  cron: "0 1 * * *"
+
+source:
+  type: rest_api
+  connection_ref: openbao://secret/data/prod/connections/crm_api
+  endpoint: /v2/leads
+
+raw:
+  namespace: prod.raw
+  table: crm_leads
+
+security:
+  pii_columns: [phone]
+  mode: encrypt_and_mask

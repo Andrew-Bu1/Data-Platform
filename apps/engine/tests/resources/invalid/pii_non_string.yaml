@@ -1,0 +1,30 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: invalid_pii_non_string
+  domain: retail_banking
+  owner: team-core-data
+
+schedule:
+  cron: "0 2 * * *"
+
+source:
+  type: dbms
+  connection_ref: openbao://secret/data/prod/connections/core_oracle
+  dialect: oracle
+  schema_name: T24
+  table: CUSTOMER
+  columns:
+    - source: NATIONAL_ID
+      target: national_id
+      source_type: NUMBER
+      target_type: int
+
+raw:
+  namespace: prod.raw
+  table: core_customer
+
+security:
+  pii_columns: [NATIONAL_ID]
+  mode: encrypt_inplace
+  key_ref: openbao://transit/keys/pii-platform

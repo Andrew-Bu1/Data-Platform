@@ -1,0 +1,23 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: invalid_checksource_no_query
+  domain: treasury
+  owner: team-treasury
+
+schedule:
+  cron: "0 5 * * *"
+
+checksource:
+  enabled: true
+  method: table_log
+  connection_ref: openbao://secret/data/prod/connections/core_oracle
+
+source:
+  type: sftp
+  connection_ref: openbao://secret/data/prod/connections/partner_sftp
+  remote_dir: /outbound/daily
+
+raw:
+  namespace: prod.raw
+  table: partner_settlement

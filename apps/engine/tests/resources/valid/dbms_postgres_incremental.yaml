@@ -1,0 +1,61 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: payments_txn_hourly
+  domain: payments
+  owner: team-payments
+  tags: [tier-1, incremental]
+
+schedule:
+  cron: "0 * * * *"
+  timezone: Asia/Ho_Chi_Minh
+  catchup: false
+
+compute:
+  engine: duckdb
+
+source:
+  type: dbms
+  connection_ref: openbao://secret/data/prod/connections/payments_pg
+  dialect: postgres
+  database: payments
+  schema_name: public
+  table: transactions
+  columns:
+    - source: txn_id
+      target: txn_id
+      source_type: bigint
+      target_type: bigint
+    - source: amount
+      target: amount
+      source_type: numeric(18,2)
+      target_type: decimal(18,2)
+    - source: updated_at
+      target: updated_at
+      source_type: timestamptz
+      target_type: timestamp
+  extraction:
+    mode: INCREMENTAL
+    tracking_column: updated_at
+    lookback_minutes: 15
+  slicing:
+    strategy: NUMERIC_RANGE
+    pk_columns: [txn_id]
+    target_partitions: 4
+    max_concurrency: 2
+
+raw:
+  namespace: prod.raw
+  table: payments_transactions
+  partition_by: [run_date]
+  dedup_order_by: [updated_at DESC]
+  pk_cols: [txn_id]
+  write_mode: merge
+
+staging:
+  namespace: prod.staging
+  table: payments_transactions
+  pattern: upsert
+  pk_cols: [txn_id]
+  dedup_order_by: [updated_at DESC]
+  delete_policy: ignore

@@ -1,0 +1,92 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: core_customer_daily
+  domain: retail_banking
+  owner: team-core-data
+  tags: [tier-1, pii, core]
+
+schedule:
+  cron: "0 2 * * *"
+  timezone: Asia/Ho_Chi_Minh
+  assets:
+    - polaris://prod/staging/retail_customer
+  catchup: false
+
+checksource:
+  enabled: true
+  method: table_log
+  connection_ref: openbao://secret/data/prod/connections/core_oracle
+  query_or_endpoint: "SELECT status FROM BATCH_LOG WHERE job = 'EOD_CLOSE' AND bus_date = :run_date"
+  expected_value: "SUCCESS"
+  poke_interval: 60
+  timeout: 120
+
+compute:
+  engine: spark
+
+source:
+  type: dbms
+  connection_ref: openbao://secret/data/prod/connections/core_oracle
+  dialect: oracle
+  database: COREDB
+  schema_name: T24
+  table: CUSTOMER
+  columns:
+    - source: CUSTOMER_ID
+      target: customer_id
+      source_type: VARCHAR2
+      target_type: string
+    - source: NATIONAL_ID
+      target: national_id
+      source_type: VARCHAR2
+      target_type: string
+    - source: FULL_NAME
+      target: full_name
+      source_type: VARCHAR2
+      target_type: string
+    - source: UPDATED_AT
+      target: updated_at
+      source_type: DATE
+      target_type: timestamp
+  extraction:
+    mode: FULL
+    tracking_column: UPDATED_AT
+    lookback_minutes: 60
+  slicing:
+    strategy: EXACT_BOUNDARY
+    pk_columns: [CUSTOMER_ID]
+    target_partitions: 16
+    max_concurrency: 4
+    fetch_size: 10000
+
+landing:
+  format: parquet
+  codec: snappy
+  ttl_days: 7
+
+raw:
+  catalog: polaris
+  namespace: prod.raw
+  table: core_customer
+  partition_by: [run_date]
+  dedup_order_by: [updated_at DESC]
+  codec: zstd
+  pk_cols: [customer_id]
+  write_mode: overwrite_partition
+
+staging:
+  catalog: polaris
+  namespace: prod.staging
+  table: retail_customer
+  pattern: scd2
+  pk_cols: [customer_id]
+  dedup_order_by: [updated_at DESC]
+  codec: zstd
+  delete_policy: hard_delete
+  wap_enabled: true
+
+security:
+  pii_columns: [NATIONAL_ID, FULL_NAME]
+  mode: encrypt_and_mask
+  key_ref: openbao://transit/keys/pii-platform

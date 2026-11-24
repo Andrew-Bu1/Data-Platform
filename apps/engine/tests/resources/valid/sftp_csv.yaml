@@ -1,0 +1,44 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: partner_settlement_sftp
+  domain: treasury
+  owner: team-treasury
+
+schedule:
+  cron: "0 5 * * *"
+
+checksource:
+  enabled: true
+  method: flag_file
+  connection_ref: openbao://secret/data/prod/connections/partner_sftp
+  query_or_endpoint: /outbound/settlement_READY.flag
+  poke_interval: 120
+  timeout: 180
+
+compute:
+  engine: duckdb
+
+source:
+  type: sftp
+  connection_ref: openbao://secret/data/prod/connections/partner_sftp
+  remote_dir: /outbound/daily
+  file_pattern: "settlement_*.csv"
+  file_format: csv
+  decrypt_key_ref: openbao://secret/data/prod/keys/partner_pgp
+
+landing:
+  format: csv
+  codec: gzip
+  ttl_days: 14
+
+raw:
+  namespace: prod.raw
+  table: partner_settlement
+  write_mode: append
+
+staging:
+  namespace: prod.staging
+  table: partner_settlement
+  pattern: append
+  delete_policy: ignore

@@ -1,0 +1,31 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: invalid_incremental_hard_delete
+  domain: payments
+  owner: team-payments
+
+schedule:
+  cron: "0 * * * *"
+
+source:
+  type: dbms
+  connection_ref: openbao://secret/data/prod/connections/payments_pg
+  dialect: postgres
+  schema_name: public
+  table: transactions
+  extraction:
+    mode: INCREMENTAL
+    tracking_column: updated_at
+
+raw:
+  namespace: prod.raw
+  table: payments_transactions
+
+staging:
+  namespace: prod.staging
+  table: payments_transactions
+  pattern: upsert
+  pk_cols: [txn_id]
+  # Invalid: default hard_delete with INCREMENTAL extraction
+  delete_policy: hard_delete

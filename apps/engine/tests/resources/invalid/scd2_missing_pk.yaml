@@ -1,0 +1,26 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: invalid_scd2_missing_pk
+  domain: retail_banking
+  owner: team-core-data
+
+schedule:
+  cron: "0 2 * * *"
+
+source:
+  type: dbms
+  connection_ref: openbao://secret/data/prod/connections/core_oracle
+  dialect: oracle
+  schema_name: T24
+  table: CUSTOMER
+
+raw:
+  namespace: prod.raw
+  table: core_customer
+
+staging:
+  namespace: prod.staging
+  table: retail_customer
+  pattern: scd2
+  pk_cols: []

@@ -1,0 +1,24 @@
+kind: DeclarativePipeline
+
+metadata:
+  id: invalid_hash_modulo_partitions
+  domain: reference
+  owner: team-platform
+
+schedule:
+  cron: "0 3 * * *"
+
+source:
+  type: dbms
+  connection_ref: openbao://secret/data/prod/connections/ref_mysql
+  dialect: mysql
+  schema_name: refdb
+  table: branches
+  slicing:
+    strategy: HASH_MODULO
+    pk_columns: [branch_code]
+    target_partitions: 32
+
+raw:
+  namespace: prod.raw
+  table: ref_branches
