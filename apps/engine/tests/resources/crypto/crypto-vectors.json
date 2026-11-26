@@ -1,0 +1,48 @@
+{
+  "algorithm": "AES-256-GCM-HMAC-SHA256-IV",
+  "key_b64": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+  "vectors": [
+    {
+      "name": "card_pan_16",
+      "plaintext": "4111223344556677",
+      "ciphertext_b64": "IrFrld84X+TPle6vnSJ3X/iT18CIY8PU34quJtpJJo267PAo9O3qrnJxvzQ=",
+      "masked": "411122xxxxxx6677"
+    },
+    {
+      "name": "card_pan_19",
+      "plaintext": "4111223344556677890",
+      "ciphertext_b64": "V1NzMycYf5Y/caDnjfP5vwlWEkafENEbNR41x5GBrpZ/n1Chlep/zHiX5w7XrwI=",
+      "masked": "411122xxxxxxxxx7890"
+    },
+    {
+      "name": "phone",
+      "plaintext": "0901234567",
+      "ciphertext_b64": "BpMe3KIWxfB0RTqU1Uwkh/4RnqkatqWyh6b44Pp68rNzetrx4Yw=",
+      "masked": "******4567"
+    },
+    {
+      "name": "vietnamese_utf8",
+      "plaintext": "Nguyễn Văn A",
+      "ciphertext_b64": "OEVBHNm8WVlLKp5y7dHafWfHTzufUR29LpAvqHJ6GZbzu7VvVprEnusRZg==",
+      "masked": "********ăn A"
+    },
+    {
+      "name": "short_str",
+      "plaintext": "123",
+      "ciphertext_b64": "58VTiksVZk7WZ+BbcIPp5HSWhbltcCo9N8uQ8tdQtg==",
+      "masked": "***"
+    },
+    {
+      "name": "empty_str",
+      "plaintext": "",
+      "ciphertext_b64": "04tCCW2A9F+Ca0Sp0TfIltJ/AiSeq4Z9ikOWMw==",
+      "masked": null
+    },
+    {
+      "name": "null_value",
+      "plaintext": null,
+      "ciphertext_b64": null,
+      "masked": null
+    }
+  ]
+}

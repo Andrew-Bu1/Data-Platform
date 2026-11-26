@@ -25,6 +25,6 @@ raw:
   table: core_customer
 
 security:
-  pii_columns: [NATIONAL_ID]
+  pii_columns: [national_id]
   mode: encrypt_inplace
   key_ref: openbao://transit/keys/pii-platform

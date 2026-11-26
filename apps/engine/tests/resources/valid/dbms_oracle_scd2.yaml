@@ -87,6 +87,6 @@ staging:
   wap_enabled: true
 
 security:
-  pii_columns: [NATIONAL_ID, FULL_NAME]
+  pii_columns: [national_id, full_name]
   mode: encrypt_and_mask
   key_ref: openbao://transit/keys/pii-platform

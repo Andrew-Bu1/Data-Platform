@@ -47,7 +47,7 @@ class DeclarativePipelineConfig(Pipeline):
             )
 
         if self.security.pii_columns and self.source.columns:
-            col_types = {c.source: c.target_type for c in self.source.columns}
+            col_types = {c.target: c.target_type for c in self.source.columns}
 
             for pii_col in self.security.pii_columns:
                 if pii_col in col_types and col_types[pii_col] != "string":
